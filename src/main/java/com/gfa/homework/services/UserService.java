@@ -1,5 +1,6 @@
 package com.gfa.homework.services;
 
+import com.gfa.homework.exceptions.AuthorizationFailureException;
 import com.gfa.homework.exceptions.InvalidLoginCredentialsException;
 import com.gfa.homework.exceptions.MissingUsernameOrPasswordException;
 import com.gfa.homework.models.User;
@@ -14,6 +15,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -66,5 +69,17 @@ public class UserService {
         userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
     final String jwt = jwtTokenUtil.generateToken(userDetails);
     return new AuthenticationResponse(jwt);
+  }
+
+  public User getUserFromToken(String header) {
+    String token = header.substring(7);
+    String username = jwtTokenUtil.extractUsername(token);
+    Optional<User> userOptional = userRepository.findByUsername(username);
+    User user;
+    if (userOptional.isEmpty()) {
+      throw new AuthorizationFailureException("User not found in database");
+    } else {
+      return user = userRepository.findByUsername(username).get();
+    }
   }
 }

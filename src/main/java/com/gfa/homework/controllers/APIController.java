@@ -1,20 +1,23 @@
 package com.gfa.homework.controllers;
 
+import com.gfa.homework.dtos.ItemCreationRequestDTO;
 import com.gfa.homework.security.AuthenticationRequest;
+import com.gfa.homework.services.ItemService;
 import com.gfa.homework.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class APIController {
 
   private UserService userService;
+  private ItemService itemService;
 
-  public APIController(UserService userService) {
+  @Autowired
+  public APIController(UserService userService, ItemService itemService) {
     this.userService = userService;
+    this.itemService = itemService;
   }
 
   @PostMapping("/authenticate")
@@ -23,8 +26,10 @@ public class APIController {
     return ResponseEntity.ok(userService.authenticate(authenticationRequest));
   }
 
-  @GetMapping("/hello")
-  public ResponseEntity<?> displayHello() {
-    return ResponseEntity.ok("Hello");
+  @PostMapping("/new-item")
+  public ResponseEntity<?> createNewItem(
+      @RequestBody ItemCreationRequestDTO itemCreationRequestDTO,
+      @RequestHeader(value = "Authorization") String header) {
+    return ResponseEntity.ok(itemService.createItem(itemCreationRequestDTO, header));
   }
 }
