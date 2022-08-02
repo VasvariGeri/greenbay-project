@@ -19,4 +19,22 @@ public class ApplicationExceptionHandler {
     private ErrorDTO handleMissingUsernameOrPasswordException(RuntimeException e) {
         return new ErrorDTO(e.getMessage());
     }
+
+    @ExceptionHandler(AuthorizationFailureException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    private ErrorDTO handleAuthorizationFailureException(RuntimeException e) {
+        return new ErrorDTO(e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidItemRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    private ErrorDTO handleInvalidItemRequestException(RuntimeException e) {
+        return new ErrorDTO(e.getMessage());
+    }
+
+    @ExceptionHandler(ItemNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    private ErrorDTO handleItemNotFoundException(RuntimeException e) {
+        return new ErrorDTO(e.getMessage());
+    }
 }

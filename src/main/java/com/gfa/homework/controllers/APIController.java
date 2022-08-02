@@ -32,4 +32,14 @@ public class APIController {
       @RequestHeader(value = "Authorization") String header) {
     return ResponseEntity.ok(itemService.createItem(itemCreationRequestDTO, header));
   }
+
+  @GetMapping("/list-items/page/{n}")
+  public ResponseEntity<?> listNthTwentyItems(@PathVariable Integer n){
+    return ResponseEntity.ok(itemService.createItemDTOList(n));
+  }
+
+  @GetMapping("/item/{id}")
+  public ResponseEntity<?> getItemInfo(@PathVariable Long id){
+    return ResponseEntity.ok(itemService.createItemDTO(id));
+  }
 }

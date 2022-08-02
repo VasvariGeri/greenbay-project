@@ -3,8 +3,10 @@ package com.gfa.homework.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Table(name = "items")
 public class Item {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,6 +16,9 @@ public class Item {
   private String url;
   private int startingPrice;
   private int purchasePrice;
+  private boolean isSold;
+  @OneToMany(cascade = CascadeType.ALL)
+  private List<Bid> bids;
 
   @ManyToOne(cascade = CascadeType.PERSIST)
   @JsonBackReference
@@ -76,5 +81,21 @@ public class Item {
 
   public void setUser(User user) {
     this.user = user;
+  }
+
+  public List<Bid> getBids() {
+    return bids;
+  }
+
+  public void setBids(List<Bid> bids) {
+    this.bids = bids;
+  }
+
+  public boolean isSold() {
+    return isSold;
+  }
+
+  public void setSold(boolean sold) {
+    isSold = sold;
   }
 }

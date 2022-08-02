@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
@@ -17,6 +18,10 @@ public class User {
     private String password;
     private boolean isActive;
     private String roles;
+    private int greenBayDollar;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Bid> placedBids;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     @JsonManagedReference
@@ -71,5 +76,21 @@ public class User {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    public int getGreenBayDollar() {
+        return greenBayDollar;
+    }
+
+    public void setGreenBayDollar(int greenBayDollar) {
+        this.greenBayDollar = greenBayDollar;
+    }
+
+    public List<Bid> getPlacedBids() {
+        return placedBids;
+    }
+
+    public void setPlacedBids(List<Bid> placedBids) {
+        this.placedBids = placedBids;
     }
 }
